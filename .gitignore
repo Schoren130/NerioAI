@@ -1,0 +1,11 @@
+__pycache__
+/dist/
+/build/
+*.exe
+*.pkg
+*.pyc
+/Agents/__pycache__
+/Agents/tools/__pycache__
+debug.log
+*.mp3
+*.wav

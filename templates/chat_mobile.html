@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Nerio Chat (Mobile)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
+    .chat-container { display: flex; flex-direction: column; height: 100vh; }
+    h1 { text-align: center; padding: 10px; margin: 0; background: #007bff; color: white; font-size: 20px; }
+    .chatbox { flex: 1; overflow-y: auto; padding: 10px; }
+    .message { display: flex; margin-bottom: 10px; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; margin-right: 8px; }
+    .bubble { background: white; padding: 10px; border-radius: 12px; max-width: 75%; font-size: 15px; }
+    .user .bubble { background: #dcf8c6; margin-left: auto; }
+    .bot .bubble { background: #fff; margin-right: auto; }
+    .input-area { display: flex; padding: 8px; background: white; border-top: 1px solid #ddd; }
+    .input-area input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
+    .input-area button { margin-left: 8px; padding: 12px 16px; border-radius: 8px; border: none; background: #007bff; color: white; font-weight: bold; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <h1>Hallo {{ username }}</h1>
+    <button id="logout-btn" onclick="logout()" class="logout-button">Logout</button>
+    <div id="chatbox" class="chatbox"></div>
+    <div class="input-area">
+      <input id="user_input" type="text" placeholder="Nachricht..." onkeydown="if(event.key === 'Enter') sendMessage()">
+      <button onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById("user_input");
+    input.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    async function sendMessage() {
+      const chatbox = document.getElementById("chatbox");
+      const userMessage = input.value.trim();
+      if (!userMessage) return;
+
+      chatbox.innerHTML += `
+        <div class="message user">
+          <div class="bubble"> ${userMessage} </div>
+        </div>`;
+      input.value = "";
+      chatbox.scrollTop = chatbox.scrollHeight;
+
+      const response = await fetch("/nerio_chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage })
+      });
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      const msgId = "nerio-" + Date.now();
+      chatbox.innerHTML += `
+        <div class="message bot" id="${msgId}">
+          <div class="bubble"><span id="${msgId}-text"></span></div>
+        </div>`;
+      const outputSpan = document.getElementById(`${msgId}-text`);
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value);
+        outputSpan.textContent += chunk;
+        const utterance = new SpeechSynthesisUtterance(chunk);
+        utterance.lang = 'de-DE';
+        utterance.rate = 1.2;   // Optional: Geschwindigkeit
+        utterance.pitch = 5;  // Optional: Tonhöhe
+        window.speechSynthesis.speak(utterance);
+        chatbox.scrollTop = chatbox.scrollHeight;
+      }
+    }
+
+    async function logout() {
+    // Ruft Flask-Logout-Route auf
+    const response = await fetch("/logout");
+    if (response.redirected) {
+      window.location.href = response.url; // Weiterleitung folgt
+    } else {
+      window.location.href = "/login"; // Fallback
+    }
+  }
+  </script>
+</body>
+</html>

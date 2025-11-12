@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Registrieren – Nerio (Mobile)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .form-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 360px;
+    }
+    h2 { text-align: center; margin-bottom: 20px; }
+    input, button { width: 100%; padding: 14px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
+    button { background: #28a745; color: white; border: none; font-weight: bold; }
+    a { display: block; text-align: center; margin-top: 15px; color: #007bff; text-decoration: none; }
+    .error { color: red; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>Registrieren</h2>
+    <form method="POST">
+      <input type="text" name="code" placeholder="Registrierungscode" required>
+      <input type="text" name="username" placeholder="Benutzername" required>
+      <input type="password" name="password" placeholder="Passwort" required>
+      <button type="submit">Registrieren</button>
+      <p class="error">{{ error }}</p>
+    </form>
+    <a href="{{ url_for('login') }}">Zurück zum Login</a>
+  </div>
+</body>
+</html>

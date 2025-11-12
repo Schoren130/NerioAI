@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Login – Nerio</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="centered">
+  <div class="form-box">
+    <h2>Login</h2>
+    <form id="loginForm" method="POST">
+      <input type="text" name="username" placeholder="Benutzername" required>
+      <input type="password" name="password" placeholder="Passwort" required>
+      <button type="submit" id="loginBtn">Einloggen</button>
+      <p class="error" id="errorMsg">{{ error }}</p>
+    </form>
+    <a href="{{ url_for('register') }}">Noch kein Konto? Jetzt registrieren</a>
+  </div>
+
+  <script>
+    const form = document.getElementById("loginForm");
+
+    async function login(event) {
+        event.preventDefault(); // Standard-Formular-Submit verhindern
+
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch("/", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.redirected) {
+                // Login erfolgreich, Benutzername holen
+                const resUsername = await fetch("/get_username");
+                const data = await resUsername.json();
+
+                if (window.pywebview) {
+                    window.pywebview.api.set_username(data.username);
+                }
+
+                // Weiterleitung zur Chat-Seite
+                window.location.href = response.url;
+            } else {
+                // Login fehlgeschlagen, Serverantwort anzeigen
+                const text = await response.text();
+                document.getElementById("errorMsg").textContent = text || "Login fehlgeschlagen";
+            }
+
+        } catch (err) {
+            console.error("Fehler beim Login:", err);
+            document.getElementById("errorMsg").textContent = "Serverfehler";
+        }
+    }
+
+    // Submit-Handler für Button
+    form.addEventListener("submit", login);
+
+    // Enter-Taste abfangen
+    form.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            form.querySelector("button[type='submit']").click();
+        }
+    });
+  </script>
+</body>
+</html>
