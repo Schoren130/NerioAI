@@ -9,15 +9,12 @@ from agents import Runner
 from globals import pending_commands , command_results
 import bcrypt
 from tts import text_to_speech
-#import nltk
 
 app = Flask(__name__)
 
 audio_ausgabe=False
 
 history = {}
-
-#nltk.download("punkt")
 
 REGISTRATION_CODES = ["REGISTRATION", ""]
 
