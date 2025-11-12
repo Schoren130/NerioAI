@@ -17,7 +17,7 @@ def init_data():
     global EMAIL_PASS
     username = session.get("username", None)
 
-    with sqlite3.connect("database.db") as conn:
+    with sqlite3.connect("/tmp/database.db") as conn:
             user = conn.execute("""
                 SELECT email, email_password, imap_server, smtp_server, imap_port, smtp_port
                 FROM users WHERE username=?

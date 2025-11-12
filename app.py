@@ -20,7 +20,7 @@ REGISTRATION_CODES = ["REGISTRATION", ""]
 
 # Datenbank-Initialisierung
 def init_db():
-    with sqlite3.connect("database.db") as conn:
+    with sqlite3.connect("/tmp/database.db") as conn:
         print("test")
         conn.execute("""CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +47,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        with sqlite3.connect("database.db") as conn:
+        with sqlite3.connect("/tmp/database.db") as conn:
             user = conn.execute("SELECT * FROM users WHERE username=?", (username,)).fetchone()
         if user and bcrypt.checkpw(password.encode("utf-8"), user[2]):
             session["username"] = username
@@ -108,7 +108,7 @@ def register_email():
         hashed_password = temp_user["password"]
 
         try:
-            with sqlite3.connect("database.db") as conn:
+            with sqlite3.connect("/tmp/database.db") as conn:
                 conn.execute("""
                     INSERT INTO users (username, password, email, email_password,
                                        imap_server, smtp_server, imap_port, smtp_port)
