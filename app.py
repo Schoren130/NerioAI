@@ -7,7 +7,6 @@ from datetime import datetime
 from Agents.orchestrator_agent import orchestrator_agent
 from openai.types.responses import ResponseTextDeltaEvent
 from agents import Runner
-from waitress import serve
 from globals import pending_commands , command_results
 import bcrypt
 from tts import text_to_speech
