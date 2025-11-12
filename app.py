@@ -12,7 +12,6 @@ from tts import text_to_speech
 #import nltk
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"
 
 audio_ausgabe=False
 
