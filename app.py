@@ -11,16 +11,14 @@ from waitress import serve
 from globals import pending_commands , command_results
 import bcrypt
 from tts import text_to_speech
-#import nltk
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
-audio_ausgabe=False
+audio_output=True
 
 history = {}
 
-#nltk.download("punkt")
 
 REGISTRATION_CODES = ["REGISTRATION", ""]
 
@@ -46,7 +44,6 @@ def is_mobile():
     ua = request.user_agent.string.lower()
     return "mobile" in ua or "iphone" in ua or "android" in ua
 
-# Startseite/Login
 @app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -68,8 +65,8 @@ def login():
 @app.route("/logout")
 def logout():
     history[session["username"]]=None
-    session.clear()  # löscht alle Sitzungsdaten (z. B. username)
-    return redirect("/")  # leitet zur Login-Seite weiter
+    session.clear() 
+    return redirect("/") 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -83,7 +80,6 @@ def register():
 
         hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
-        # Temporär speichern bis E-Mail-Daten eingegeben sind
         session["temp_user"] = {
             "username": username,
             "password": hashed_password
@@ -129,7 +125,6 @@ def register_email():
     return render_template("register_email.html")
 
 
-# Chat-Seite
 @app.route("/chat")
 def chat():
     if "username" not in session:
@@ -158,12 +153,12 @@ def nerio_chat():
     audio_files = []
 
     for sentence in sentences:
-        if audio_ausgabe:
-            audio_file_path = text_to_speech(sentence)  # Generiere die Audiodatei für jeden Satz
+        if audio_output:
+            audio_file_path = text_to_speech(sentence)
             audio_files.append(audio_file_path)
         history[session["username"]].append({"role": "assistant", "content": sentence})
 
-    return jsonify({"responses": sentences, "audio": audio_files})  # Gebe Sätze und Audio zurück
+    return jsonify({"responses": sentences, "audio": audio_files})
 
 
 async def run_nerio():
