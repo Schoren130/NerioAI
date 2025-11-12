@@ -1,6 +1,5 @@
 flask
 openai-agents
-waitress
 pywebview
 msal
 bcrypt
