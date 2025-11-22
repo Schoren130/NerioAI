@@ -8,8 +8,10 @@ from openai.types.responses import ResponseTextDeltaEvent
 from agents import Runner
 from globals import pending_commands , command_results
 import bcrypt
+import os
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 
 audio_ausgabe=False
 
