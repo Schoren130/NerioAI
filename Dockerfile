@@ -1,6 +1,13 @@
-FROM python:3.11-slim
+FROM python:3.8-slim
+
 WORKDIR /app
+
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+
+RUN python -m pip install --no-cache-dir -r requirements.txt
+
 COPY . .
-CMD exec gunicorn --bind :$PORT app:app
+
+ENV PATH="/usr/local/bin:${PATH}"
+
+CMD ["gunicorn", "--bind", ":8080", "app:app"]
