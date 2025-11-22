@@ -8,7 +8,6 @@ from openai.types.responses import ResponseTextDeltaEvent
 from agents import Runner
 from globals import pending_commands , command_results
 import bcrypt
-from tts import text_to_speech
 
 app = Flask(__name__)
 
@@ -153,8 +152,9 @@ def nerio_chat():
 
     for sentence in sentences:
         if audio_ausgabe:
-            audio_file_path = text_to_speech(sentence)  # Generiere die Audiodatei für jeden Satz
-            audio_files.append(audio_file_path)
+            # audio_file_path = text_to_speech(sentence)  # Generiere die Audiodatei für jeden Satz
+            # audio_files.append(audio_file_path)
+            pass
         history[session["username"]].append({"role": "assistant", "content": sentence})
 
     return jsonify({"responses": sentences, "audio": audio_files})  # Gebe Sätze und Audio zurück
