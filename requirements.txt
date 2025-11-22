@@ -3,3 +3,5 @@ openai-agents
 pywebview
 msal
 bcrypt
+gunicorn
+python-dateutil
