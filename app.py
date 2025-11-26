@@ -9,6 +9,10 @@ from agents import Runner
 from globals import pending_commands , command_results
 import bcrypt
 import os
+from load_firebase import db
+from dotenv import load_dotenv
+
+load_dotenv
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")
@@ -18,24 +22,6 @@ audio_ausgabe=False
 history = {}
 
 REGISTRATION_CODES = ["REGISTRATION", ""]
-
-# Datenbank-Initialisierung
-def init_db():
-    with sqlite3.connect("/tmp/database.db") as conn:
-        print("test")
-        conn.execute("""CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT,
-            email TEXT,
-            email_password TEXT,
-            imap_server TEXT,
-            smtp_server TEXT,
-            imap_port INTEGER,
-            smtp_port INTEGER
-        )""")
-
-init_db()
 
 def is_mobile():
     ua = request.user_agent.string.lower()
@@ -48,8 +34,17 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        with sqlite3.connect("/tmp/database.db") as conn:
-            user = conn.execute("SELECT * FROM users WHERE username=?", (username,)).fetchone()
+        user_ref = db.collection("users").document(username)
+        user_doc = user_ref.get()
+        if user_doc.exists:
+            user = user_doc.to_dict()
+            if bcrypt.checkpw(password.encode("utf-8"), user["password"]):
+                session["username"] = username
+                history[username] = [{"role": "system", "content": "Du bist nerio..."}]
+                return redirect("/chat")
+        else:
+            return "Login fehlgeschlagen"
+        
         if user and bcrypt.checkpw(password.encode("utf-8"), user[2]):
             session["username"] = username
             history[username]=[{"role": "system", "content": "Du bist nerio ein hilfreicher Assistent. Die uhrzeit die du bekommst ist immer richtig!!!!"}]
@@ -109,13 +104,20 @@ def register_email():
         hashed_password = temp_user["password"]
 
         try:
-            with sqlite3.connect("/tmp/database.db") as conn:
-                conn.execute("""
-                    INSERT INTO users (username, password, email, email_password,
-                                       imap_server, smtp_server, imap_port, smtp_port)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                """, (username, hashed_password, email, email_password,
-                      imap_server, smtp_server, imap_port, smtp_port))
+            user_ref = db.collection("users").document(username)  # username als Dokument-ID
+            if user_ref.get().exists:
+                return "Benutzername existiert bereits."
+            
+            user_ref.set({
+                "username": username,
+                "password": hashed_password,   # gespeichert als Bytes oder String
+                "email": email,
+                "email_password": email_password,
+                "imap_server": imap_server,
+                "smtp_server": smtp_server,
+                "imap_port": imap_port,
+                "smtp_port": smtp_port
+            })
             return redirect("/")
         except Exception as e:
             print(e)
