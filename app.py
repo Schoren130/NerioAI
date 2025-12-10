@@ -146,7 +146,10 @@ def get_username():
 def nerio_chat():
     global history
     message = request.json["message"]
-    switch_state = request.json["switch"] 
+    try:
+        switch_state = request.json["switch"]
+    except Exception:
+        switch_state=False 
     history[session["username"]].append(
         {"role": "user", "content": message})
     output = asyncio.run(run_nerio())
