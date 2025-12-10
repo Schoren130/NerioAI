@@ -5,3 +5,5 @@ msal
 bcrypt
 gunicorn
 python-dateutil
+firebase-admin
+google-cloud-texttospeech
