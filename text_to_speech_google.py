@@ -4,7 +4,7 @@ import os
 
 
 def text_to_speech(text):
-    client = texttospeech.TextToSpeechClient(client_options={"api_key": "AIzaSyC0LwH6m5Bw6MMpc9ArC_4ok7HWCFgqoP8"})
+    client = texttospeech.TextToSpeechClient()
 
     synthesis_input = texttospeech.SynthesisInput(text=text)
 
