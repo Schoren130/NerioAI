@@ -9,6 +9,7 @@ from agents import Runner
 from globals import pending_commands , command_results
 import bcrypt
 import os
+from text_to_speech_google import text_to_speech
 from load_firebase import db
 from dotenv import load_dotenv
 
@@ -145,6 +146,7 @@ def get_username():
 def nerio_chat():
     global history
     message = request.json["message"]
+    switch_state = request.json["switch"] 
     history[session["username"]].append(
         {"role": "user", "content": message})
     output = asyncio.run(run_nerio())
@@ -155,10 +157,9 @@ def nerio_chat():
     audio_files = []
 
     for sentence in sentences:
-        if audio_ausgabe:
-            # audio_file_path = text_to_speech(sentence)  # Generiere die Audiodatei für jeden Satz
-            # audio_files.append(audio_file_path)
-            pass
+        if switch_state:
+            audio_file_path = text_to_speech(sentence)  # Generiere die Audiodatei für jeden Satz
+            audio_files.append(audio_file_path)
         history[session["username"]].append({"role": "assistant", "content": sentence})
 
     return jsonify({"responses": sentences, "audio": audio_files})  # Gebe Sätze und Audio zurück

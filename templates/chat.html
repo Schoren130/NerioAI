@@ -19,6 +19,11 @@
       <button onclick="sendMessage()">Senden</button>
     </div>
   </div>
+  <label class="switch">
+    <input type="checkbox" id="mySwitch" {% if switch_state %}checked{% endif %}>
+  <span class="slider"></span>
+  </label>
+
 
   <script>
   const input = document.getElementById("user_input");
@@ -34,6 +39,8 @@
     const userMessage = input.value.trim();
     if (!userMessage) return;
 
+    const switchState = document.getElementById("mySwitch").checked;
+
     chatbox.innerHTML += `
       <div class="message user">
         <img src="/static/user.png" class="avatar">
@@ -47,7 +54,7 @@
     const response = await fetch("/nerio_chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage })
+        body: JSON.stringify({ message: userMessage, switch: switchState })
     });
 
     const data = await response.json();
