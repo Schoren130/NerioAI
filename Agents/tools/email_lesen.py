@@ -1,30 +1,28 @@
-from agents import function_tool
+from agents import function_tool  # type: ignore
+from Agents.tools.helpers.nylasclient import nylasClient
 import imaplib
 import email
 from email.header import decode_header
 import sqlite3
 from flask import session
+from firebase_test import db
 
 IMAP_SERVER = None
 EMAIL_USER = None
 EMAIL_PASS = None
 
 def init_data():
-    
-    global IMAP_SERVER
-    global EMAIL_USER
-    global EMAIL_PASS
+    global IMAP_SERVER, EMAIL_USER, EMAIL_PASS
     username = session.get("username", None)
+    if not username:
+        return
 
-    with sqlite3.connect("database.db") as conn:
-            user = conn.execute("""
-                SELECT email, email_password, imap_server, smtp_server, imap_port, smtp_port
-                FROM users WHERE username=?
-            """, (username,)).fetchone()
-
-    IMAP_SERVER = user[2]
-    EMAIL_USER = user[0]
-    EMAIL_PASS = user[1]
+    user_doc = db.collection("users").document(username).get()
+    if user_doc.exists:
+        user = user_doc.to_dict()
+        EMAIL_USER = user["email"]
+        EMAIL_PASS = user["email_password"]
+        IMAP_SERVER = user["imap_server"]
 
 
 
@@ -73,7 +71,7 @@ async def email_lesen(von: str , limit:int) -> None:
 
     emails = []
     for num in latest_ids:
-        _, msg_data = mail.fetch(num, "(RFC822)")
+        _, msg_data = mail.fetch(num, "(BODY.PEEK[])")
         emails.append(parse_email(msg_data[0][1]))
 
     mail.logout()
@@ -85,6 +83,7 @@ async def ungelesene_email_lesen() -> None:
     print("unemail wird gelesnen")
     try:
         mail = connect_mailbox()
+        mail.search
         status, messages = mail.search(None, "UNSEEN")
 
         emails = []
@@ -98,4 +97,6 @@ async def ungelesene_email_lesen() -> None:
     except Exception as e:
         print(e)
         return(e)
+    
+
     

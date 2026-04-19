@@ -9,3 +9,8 @@ __pycache__
 debug.log
 *.mp3
 *.wav
+/react/node_modules/
+/internet_data/
+/.venv/
+.env
+account_key_firebase.json

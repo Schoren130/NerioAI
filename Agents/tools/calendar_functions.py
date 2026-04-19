@@ -11,6 +11,7 @@ import dateutil.parser
 
 # ---------- Azure AD Konfiguration ----------
 CLIENT_ID = 'a559bb35-722e-4097-955f-91b2d5d4a233'
+TENANT_ID = "f29b5a6d-8658-43ff-b3d5-13a41e786135"
 AUTHORITY = f'https://login.microsoftonline.com/common'
 SCOPE = ['Calendars.ReadWrite']
 

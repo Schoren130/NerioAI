@@ -4,6 +4,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import sqlite3
 from flask import session
+from firebase_test import db
+
+
+
 
 SMTP_SERVER = None
 SMTP_PORT = None
@@ -11,22 +15,18 @@ EMAIL_USER = None
 EMAIL_PASS = None
 
 def init_data():
-    global SMTP_SERVER
-    global SMTP_PORT
-    global EMAIL_USER
-    global EMAIL_PASS
+    global SMTP_SERVER, SMTP_PORT, EMAIL_USER, EMAIL_PASS
     username = session.get("username", None)
+    if not username:
+        return
 
-    with sqlite3.connect("database.db") as conn:
-            user = conn.execute("""
-                SELECT email, email_password, imap_server, smtp_server, imap_port, smtp_port
-                FROM users WHERE username=?
-            """, (username,)).fetchone()
-
-    SMTP_SERVER = user[3]
-    SMTP_PORT = user[5]
-    EMAIL_USER = user[0]
-    EMAIL_PASS = user[1]
+    user_doc = db.collection("users").document(username).get()
+    if user_doc.exists:
+        user = user_doc.to_dict()
+        EMAIL_USER = user["email"]
+        EMAIL_PASS = user["email_password"]
+        SMTP_SERVER = user["smtp_server"]
+        SMTP_PORT = user["smtp_port"]
 
 
 
