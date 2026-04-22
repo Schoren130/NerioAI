@@ -234,14 +234,17 @@ def nerio_chat():
     username = f"{base_username}raspacc" if is_rasp else base_username
 
     if username not in history:
-        history[username] = [{"role": "system", "content": "Du bist nerio ein hilfreicher Assistent. Die uhrzeit die du bekommst ist immer richtig!!!!"}]
+        history[username] = [{"role": "system", "content": "Du bist nerio ein hilfreicher Assistent. Die uhrzeit die du bekommst ist immer richtig!"}]
 
     if is_rasp:
         now = time.time()
         last_time = last_activity.get(username, 0)
         # 600 Sekunden = 10 Minuten Inaktivität
         if (now - last_time) > 600:
-            history[username] = [{"role": "system", "content": "Du bist nerio ein hilfreicher Assistent. Die uhrzeit die du bekommst ist immer richtig!!!!"}]
+            history[username] = [{"role": "system", "content": "Du bist nerio ein hilfreicher Assistent. Die uhrzeit die du bekommst ist immer richtig!"}]
+            history[username].append(
+                {"role": "system", "content": "Dieser chat ist nicht von der website sondern von dem Sprachassistenten."}
+            )
         last_activity[username] = now
 
     history[username].append(

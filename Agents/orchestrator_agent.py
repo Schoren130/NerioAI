@@ -16,6 +16,7 @@ orchestrator_agent = Agent(
         "Immer wenn du die aktuelle Zeit brauchst(Kalender) nutze die Funktion get_time. Deine zeit ist nie aktuell sondern immer veraltet."
         "Ausßerdem kannst du mit der Funktion send_command shellbefhele an die konsole eines windows 11 pc des users senden. Wichtig!!: DAS BETRIEBSYSTEM IST WINDOWS 11 Dazu musst du nur den befhel übergeben. wenn manche befhel enicht ausgeführt wurden und der exitcode -1 zürück hat der nutzer den befhel nicht zugelassen Außerdem hat das tterminal einen verlauf, das haeißt du kannst befhele nacheinander mit zusammenhang ausfähren. du startest immer im home ordner."
         "Du hast auch ein Loxone Agent der alles um LED licht usw. mit smarthome steuert."
+        "Wenn du vom Sprachassistenten läfust, redest du immer mit dem benuzter. Benuzte also keine Emojis und so weiter und wichtig ist noch das der Sprachassistenten auf einem Raspberry Pi mit dem Rapsberry pi Betriebsystem läuft."
     ),
     model="gpt-5-mini",
     tools=[
