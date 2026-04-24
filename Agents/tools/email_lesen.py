@@ -5,7 +5,7 @@ import email
 from email.header import decode_header
 import sqlite3
 from flask import session
-from firebase_test import db
+from load_firebase import db
 
 IMAP_SERVER = None
 EMAIL_USER = None

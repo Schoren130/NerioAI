@@ -13,7 +13,7 @@ from globals import pending_commands , command_results
 import bcrypt
 from text_to_speech_google import text_to_speech
 #import nltk
-from firebase_test import db
+from load_firebase import db
 from flask_cors import CORS
 import openai
 from dotenv import load_dotenv

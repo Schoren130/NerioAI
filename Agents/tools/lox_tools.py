@@ -1,7 +1,7 @@
 import requests
 from agents import function_tool
 import json
-from firebase_test import db
+from load_firebase import db
 from flask import session
 
 """MINISERVER = "https://192.168.1.137"  # oder https, wenn dein Miniserver das unterstützt

@@ -12,3 +12,4 @@ flask-cors
 firebase-admin
 google-cloud-texttospeech
 python-dateutil
+gunicorn
