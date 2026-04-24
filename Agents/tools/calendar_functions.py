@@ -1,11 +1,9 @@
 import msal
 import requests
-import webbrowser
 import os
 import json
 from flask import session
 from agents import function_tool  # type: ignore
-from datetime import datetime, timezone
 import dateutil.parser
 
 

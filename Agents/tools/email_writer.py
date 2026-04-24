@@ -2,11 +2,8 @@ from agents import function_tool  # type: ignore
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import sqlite3
 from flask import session
 from load_firebase import db
-
-
 
 
 SMTP_SERVER = None

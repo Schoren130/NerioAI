@@ -1,9 +1,7 @@
 from agents import function_tool  # type: ignore
-from Agents.tools.helpers.nylasclient import nylasClient
 import imaplib
 import email
 from email.header import decode_header
-import sqlite3
 from flask import session
 from load_firebase import db
 
