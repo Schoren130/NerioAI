@@ -1,9 +1,14 @@
 flask
 openai-agents
+waitress
 pywebview
 msal
 bcrypt
-gunicorn
-python-dateutil
+pyttsx3
+dotenv
+elevenlabs
+nltk
+flask-cors
 firebase-admin
 google-cloud-texttospeech
+python-dateutil

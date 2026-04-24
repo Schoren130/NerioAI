@@ -10,3 +10,6 @@ debug.log
 *.mp3
 *.wav
 *.env
+/react/node_modules/
+/.vscode/
+/internet_data/

@@ -1,10 +1,11 @@
-from agents import function_tool
+from agents import function_tool  # type: ignore
+from Agents.tools.helpers.nylasclient import nylasClient
 import imaplib
 import email
 from email.header import decode_header
 import sqlite3
 from flask import session
-from load_firebase import db
+from firebase_test import db
 
 IMAP_SERVER = None
 EMAIL_USER = None
@@ -70,7 +71,7 @@ async def email_lesen(von: str , limit:int) -> None:
 
     emails = []
     for num in latest_ids:
-        _, msg_data = mail.fetch(num, "(RFC822)")
+        _, msg_data = mail.fetch(num, "(BODY.PEEK[])")
         emails.append(parse_email(msg_data[0][1]))
 
     mail.logout()
@@ -82,6 +83,7 @@ async def ungelesene_email_lesen() -> None:
     print("unemail wird gelesnen")
     try:
         mail = connect_mailbox()
+        mail.search
         status, messages = mail.search(None, "UNSEEN")
 
         emails = []
@@ -95,4 +97,6 @@ async def ungelesene_email_lesen() -> None:
     except Exception as e:
         print(e)
         return(e)
+    
+
     

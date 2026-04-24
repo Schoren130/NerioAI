@@ -4,7 +4,11 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import sqlite3
 from flask import session
-from load_firebase import db
+from firebase_test import db
+
+
+
+
 SMTP_SERVER = None
 SMTP_PORT = None
 EMAIL_USER = None

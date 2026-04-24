@@ -1,10 +1,14 @@
 from google.cloud import texttospeech
 import uuid
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
+api_key=os.environ.get("TTS_KEY")
 
 def text_to_speech(text):
-    client = texttospeech.TextToSpeechClient()
+    print("hi")
+    client = texttospeech.TextToSpeechClient(client_options={"api_key": api_key})
 
     synthesis_input = texttospeech.SynthesisInput(text=text)
 

@@ -8,7 +8,7 @@ from tkinter import messagebox
 import sys
 import atexit
 
-SERVER_URL = "http://172.18.5.122:5000" # Experimenta Laptop
+SERVER_URL = "http://127.0.0.1:5000" # Experimenta Laptop
 #SERVER_URL = "http://10.28.5.51:5000" # Laptop Frank
 #SERVER_URL =  "http://172.18.5.122:5000" # Experimenta Laptop 2
 #SERVER_URL = "http://192.168.88.166:5000" # PC Nero
@@ -36,7 +36,7 @@ def start_powershell():
     global powershell
     home_dir = os.path.expanduser("~")  # ermittelt z.B. C:\Users\DeinName
     powershell = subprocess.Popen(
-        ["powershell.exe", "-NoLogo", "-NoExit", "-Command", f"cd '{home_dir}'"],
+        ["bash", f"cd '{home_dir}'"],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -74,7 +74,8 @@ def poll_server():
 
                     #break
 
-                if command.strip().split()[0].lower() in WHITELIST or ask_user_confirmation(command):
+                #if command.strip().split()[0].lower() in WHITELIST or ask_user_confirmation(command):
+                if True == True:
                     result = run_persistent_powershell(command)
                 else:
                     result = {"stdout": "", "stderr": "Vom Benutzer abgebrochen", "returncode": -1}
